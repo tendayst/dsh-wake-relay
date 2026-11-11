@@ -7,3 +7,6 @@ wake-endpoint.json
 wake-bridge-secret.json
 wake-bridge-events.jsonl
 .DS_Store
+
+media/
+

@@ -50,12 +50,40 @@ No UI is a deliberate choice: this plugin's user is a script.
 
 ## Install
 
-```bash
-dsh plugin --profile desktop add dsh-wake-relay     # from npm
-dsh plugin --profile <your-profile> add ./dsh-wake-relay   # from a local clone
+**The `desktop` profile is owned by the Electron app — the CLI refuses to touch it:**
+
+```
+error: profile "desktop" is managed exclusively by the Electron application
 ```
 
-Installing from npm usually takes effect **immediately** (`plugin_manager` applies it live; no restart needed). The only reliable check is whether `wake-bridge.log` gained a new `listening` line — if not, restart DSH once.
+Two paths, then.
+
+**① Let the agent install it (works on desktop and web, recommended)**
+
+Paste this into your DSH:
+
+````text
+Install dsh-wake-relay — the external wake bridge on npm. Follow the Install section of its README; do not invent steps.
+
+When done, reply with exactly three lines: profile name / actual port / the raw GET /health response.
+
+The only proof it installed is a new `listening` line in $DSH_HOME/wake-bridge.log. `install_bundle` returning `applied` is not proof — it says that even when nothing loaded.
+````
+
+**② Command line (profiles not owned by Electron, e.g. `dsh web`)**
+
+```bash
+dsh plugin --profile web add dsh-wake-relay
+```
+
+From a local clone:
+
+```bash
+git clone https://github.com/tendayst/dsh-wake-relay
+dsh plugin --profile web add ./dsh-wake-relay
+```
+
+Installing usually takes effect **immediately** (`plugin_manager` applies it live; no restart needed). The only reliable check is whether `wake-bridge.log` gained a new `listening` line — if not, restart DSH once.
 
 > **Do not install a second wake plugin alongside this one.** They all publish to the same `$DSH_HOME/wake-endpoint.json`. Two of them fight over the port (the loser falls back to an ephemeral one), and the one that stops can erase the other's discovery file. Since 0.1.2 this plugin only clears that file when it still points at itself, but the port contention remains.
 

@@ -46,16 +46,40 @@ UI 是有意的取舍：这个插件的读者是**脚本**，不是人的眼睛�
 
 ## 安装
 
-```bash
-# 从 npm（发布后）
-dsh plugin --profile desktop add dsh-wake-relay
+**桌面版的 `desktop` profile 由 Electron 独占，命令行装不了**——`dsh plugin --profile desktop add …` 会直接报错：
 
-# 从本地目录
-git clone <repo> dsh-wake-relay
-dsh plugin --profile <你的 profile> add ./dsh-wake-relay
+```
+error: profile "desktop" is managed exclusively by the Electron application
 ```
 
-从 npm 装通常**即时生效**（`plugin_manager` 会动态 apply，不用重启）。判断标准只有一条：`wake-bridge.log` 里有没有新的 `listening` 行。没有就重启一次 DSH。
+所以分两种路径。
+
+**① 让 AI 装（桌面版 / Web 版都适用，推荐）**
+
+把这段粘给你的 DSH，它会自己装好并验证：
+
+````text
+帮我装 dsh-wake-relay —— npm 上的 DSH 外部唤醒桥。照它 README 的「安装」那节来，别自己发明步骤。
+
+装好只回三行：profile 名 / 实际端口 / GET /health 的返回。
+
+判据只有一条：$DSH_HOME/wake-bridge.log 里多了一行 listening 才算装上。install_bundle 返回 applied 不算——它没加载也这么说。
+````
+
+**② 命令行（`dsh web` 这类非 Electron 管理的 profile）**
+
+```bash
+dsh plugin --profile web add dsh-wake-relay
+```
+
+从本地目录装：
+
+```bash
+git clone https://github.com/tendayst/dsh-wake-relay
+dsh plugin --profile web add ./dsh-wake-relay
+```
+
+装完通常**即时生效**（`plugin_manager` 会动态 apply，不用重启）。判断标准只有一条：`wake-bridge.log` 里有没有新的 `listening` 行。没有就重启一次 DSH。
 
 > **不要同时装第二个唤醒插件。** 所有实现都写同一个 `$DSH_HOME/wake-endpoint.json`。两个同时跑会抢端口（后启动的那个退到随机端口），而停止时写的 `port: null` 会让另一个的发现文件失效——0.1.2 起本插件只在文件仍指向自己时才清空，但端口之争依然存在。
 
