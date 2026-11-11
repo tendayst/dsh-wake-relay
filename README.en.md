@@ -55,7 +55,9 @@ dsh plugin --profile desktop add dsh-wake-relay     # from npm
 dsh plugin --profile <your-profile> add ./dsh-wake-relay   # from a local clone
 ```
 
-Restart DSH afterwards — the plugin tree is composed at process start.
+Installing from npm usually takes effect **immediately** (`plugin_manager` applies it live; no restart needed). The only reliable check is whether `wake-bridge.log` gained a new `listening` line — if not, restart DSH once.
+
+> **Do not install a second wake plugin alongside this one.** They all publish to the same `$DSH_HOME/wake-endpoint.json`. Two of them fight over the port (the loser falls back to an ephemeral one), and the one that stops can erase the other's discovery file. Since 0.1.2 this plugin only clears that file when it still points at itself, but the port contention remains.
 
 ### Two traps you only hit while installing
 

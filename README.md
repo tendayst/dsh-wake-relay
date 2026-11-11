@@ -55,7 +55,9 @@ git clone <repo> dsh-wake-relay
 dsh plugin --profile <你的 profile> add ./dsh-wake-relay
 ```
 
-装完**重启 DSH** 生效（插件树在进程启动时组合）。
+从 npm 装通常**即时生效**（`plugin_manager` 会动态 apply，不用重启）。判断标准只有一条：`wake-bridge.log` 里有没有新的 `listening` 行。没有就重启一次 DSH。
+
+> **不要同时装第二个唤醒插件。** 所有实现都写同一个 `$DSH_HOME/wake-endpoint.json`。两个同时跑会抢端口（后启动的那个退到随机端口），而停止时写的 `port: null` 会让另一个的发现文件失效——0.1.2 起本插件只在文件仍指向自己时才清空，但端口之争依然存在。
 
 ### 两个装的时候才会遇到的陷阱
 

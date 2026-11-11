@@ -533,6 +533,18 @@ export function apply(ctx, config) {
       } catch {
         /* ignore */
       }
+      // Two wake plugins can share one $DSH_HOME, and they all publish to the
+      // same endpoint path. Only erase the discovery file if it still describes
+      // this instance — otherwise the one that stops last blinds the other.
+      try {
+        const current = JSON.parse(readFileSync(ENDPOINT_PATH, "utf8"));
+        if (Number(current.port) !== Number(listenPort)) {
+          log(`stopped; left the endpoint file alone (it belongs to port ${current.port})`);
+          return;
+        }
+      } catch {
+        /* no endpoint file: nothing to guard */
+      }
       try {
         writeFileSync(ENDPOINT_PATH, JSON.stringify({ port: null, stoppedAt: new Date().toISOString() }), "utf8");
       } catch {
