@@ -36,8 +36,16 @@
     "agent",
     "automation"
   ],
-  "author": "LittleCodeSauce",
+  "author": "tendayst",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tendayst/dsh-wake-relay.git"
+  },
+  "homepage": "https://github.com/tendayst/dsh-wake-relay#readme",
+  "bugs": {
+    "url": "https://github.com/tendayst/dsh-wake-relay/issues"
+  },
   "engines": {
     "node": ">=20"
   },
