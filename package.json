@@ -1,6 +1,6 @@
 {
   "name": "dsh-wake-relay",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Let any external process wake a DeepSeek Harness session — with synchronous delivery semantics, so the caller can own the retry loop and fire events that happened while the host was down.",
   "type": "module",
   "main": "./index.js",
