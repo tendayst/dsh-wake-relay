@@ -1,5 +1,5 @@
 /**
- * dsh-wake-bridge
+ * dsh-wake-relay
  *
  * A local-only HTTP endpoint that lets an external process (a watcher daemon, a
  * build listener, a CI callback on the same machine) wake a Harness session and

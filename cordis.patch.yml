@@ -1,4 +1,4 @@
-# Bundle patch for dsh-wake-bridge.
+# Bundle patch for dsh-wake-relay.
 #
 # The entry id must not collide with another bundle: profiles persist enable /
 # disable state per entry id, so reusing an id that another install already
@@ -8,8 +8,8 @@
 # first boot and persists it to $DSH_HOME/wake-bridge-secret.json; with an empty
 # sessionId only requests that carry an explicit `session` are accepted.
 - insert:
-    - id: dsh-wake-bridge
-      name: dsh-wake-bridge
+    - id: dsh-wake-relay
+      name: dsh-wake-relay
       config:
         port: 45871
         token: ''

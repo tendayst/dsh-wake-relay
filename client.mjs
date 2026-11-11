@@ -1,5 +1,5 @@
 /**
- * Minimal client for dsh-wake-bridge.
+ * Minimal client for dsh-wake-relay.
  *
  * Reads `$DSH_HOME/wake-endpoint.json` (or an explicit {port, token}) and POSTs
  * one wake event. Nothing is retried here on purpose: the bridge returns 503

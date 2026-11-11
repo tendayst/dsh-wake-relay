@@ -1,4 +1,4 @@
-# dsh-wake-bridge
+# dsh-wake-relay
 
 Let any external process wake a DeepSeek Harness session — build watchers, job runners, CI callbacks, scrapers, backup scripts, phone-push relays. Anything that can send one HTTP POST.
 
@@ -51,8 +51,8 @@ No UI is a deliberate choice: this plugin's user is a script.
 ## Install
 
 ```bash
-dsh plugin --profile desktop add dsh-wake-bridge     # from npm
-dsh plugin --profile <your-profile> add ./dsh-wake-bridge   # from a local clone
+dsh plugin --profile desktop add dsh-wake-relay     # from npm
+dsh plugin --profile <your-profile> add ./dsh-wake-relay   # from a local clone
 ```
 
 Restart DSH afterwards — the plugin tree is composed at process start.
@@ -78,7 +78,7 @@ Pin `sessionId` in `cordis.patch.yml`, or pass `session` on every request.
 
 > Installing from a local directory links the package (`pnpm link:`), and the linked copy cannot resolve host packages from the workspace root → `ERR_MODULE_NOT_FOUND`. Fix with a junction:
 > ```
-> mklink /J "…\dsh-wake-bridge\node_modules\@deepseek-ai\dsh-llm" "C:\Users\<you>\.dsh\profiles\node_modules\@deepseek-ai\dsh-llm"
+> mklink /J "…\dsh-wake-relay\node_modules\@deepseek-ai\dsh-llm" "C:\Users\<you>\.dsh\profiles\node_modules\@deepseek-ai\dsh-llm"
 > ```
 > After a failed load, `install_bundle` only reports `already-installed`; toggle `include:<id>` off and on to force a re-import.
 
@@ -138,7 +138,7 @@ POST /bind     (x-wake-token) -> {accepted, sessionId}   rebind the default (not
 ### Node
 
 ```js
-import { wake } from "dsh-wake-bridge/client";
+import { wake } from "dsh-wake-relay/client";
 
 const r = await wake({ event_id: `job-${Date.now()}`, reason: "JOB_DONE", detail: "…" });
 if (r.retryable) setTimeout(() => wake(sameEvent), 30_000); // 503 means nothing was recorded

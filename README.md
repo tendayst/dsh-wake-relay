@@ -1,4 +1,4 @@
-# dsh-wake-bridge · 外部唤醒
+# dsh-wake-relay · 外部唤醒
 
 **English: [README.en.md](./README.en.md)**
 
@@ -48,11 +48,11 @@ UI 是有意的取舍：这个插件的读者是**脚本**，不是人的眼睛�
 
 ```bash
 # 从 npm（发布后）
-dsh plugin --profile desktop add dsh-wake-bridge
+dsh plugin --profile desktop add dsh-wake-relay
 
 # 从本地目录
-git clone <repo> dsh-wake-bridge
-dsh plugin --profile <你的 profile> add ./dsh-wake-bridge
+git clone <repo> dsh-wake-relay
+dsh plugin --profile <你的 profile> add ./dsh-wake-relay
 ```
 
 装完**重启 DSH** 生效（插件树在进程启动时组合）。
@@ -78,7 +78,7 @@ listening on 127.0.0.1:45871 — NO default session bound: every /wake request m
 
 > 本地目录安装的另一个已知坑：`install_bundle` 传目录落的是 `pnpm link:`，插件从 workspace 真实路径解析不到宿主包 → `ERR_MODULE_NOT_FOUND`。修法是在包目录里建 junction：
 > ```
-> mklink /J "…\dsh-wake-bridge\node_modules\@deepseek-ai\dsh-llm" "C:\Users\<你>\.dsh\profiles\node_modules\@deepseek-ai\dsh-llm"
+> mklink /J "…\dsh-wake-relay\node_modules\@deepseek-ai\dsh-llm" "C:\Users\<你>\.dsh\profiles\node_modules\@deepseek-ai\dsh-llm"
 > ```
 > 安装失败后 `install_bundle` 只会报 `already-installed`，要 `set_plugin` 把 `include:<id>` 关掉再打开才能强制重新 import。
 
@@ -142,7 +142,7 @@ POST /bind     (x-wake-token) → {accepted, sessionId}   换默认绑定（不�
 ### Node 客户端
 
 ```js
-import { wake } from "dsh-wake-bridge/client";
+import { wake } from "dsh-wake-relay/client";
 
 const r = await wake({ event_id: `job-${Date.now()}`, reason: "JOB_DONE", detail: "…" });
 if (r.retryable) setTimeout(() => wake(sameEvent), 30_000); // 503 → 值得重试

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Canonical client for the dsh-wake-bridge plugin.
+"""Canonical client for the dsh-wake-relay plugin.
 
 One POST, no hidden throttling: the caller decides whether a rejected wake is
 retried. The bridge is the only rate limiter (per-reason cooldown + 7-day
