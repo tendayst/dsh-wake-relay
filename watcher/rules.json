@@ -1,0 +1,4 @@
+{
+  "defaults": { "interval_s": 30, "session": "latest", "rearm_s": 60, "ttl_s": 3600 },
+  "rules": []
+}

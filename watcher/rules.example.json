@@ -1,0 +1,46 @@
+{
+  "defaults": { "interval_s": 30, "session": "latest", "rearm_s": 60, "ttl_s": 3600 },
+  "rules": [
+    {
+      "id": "build-finished",
+      "enabled": false,
+      "comment": "退出码 0 = 条件成立。旧脚本一行都不用改，包成规则即可。",
+      "probe": { "type": "command", "cmd": ["python", "/path/to/check_done.py"], "expect_exit": 0 },
+      "fire": { "reason": "BUILD_DONE", "kind": "info", "detail": "{detail}" },
+      "once": true
+    },
+    {
+      "id": "queue-backlog",
+      "enabled": false,
+      "comment": "http_json 取字段做断言，这是只判 body 变化的探针做不到的。",
+      "probe": {
+        "type": "http_json",
+        "url": "https://example.com/api/status",
+        "path": "queued",
+        "op": ">",
+        "value": 100
+      },
+      "fire": {
+        "reason": "QUEUE_BACKLOG",
+        "kind": "info",
+        "detail": "queued={value}",
+        "data": { "queued": "{value}", "queue": "default" }
+      },
+      "session": "session-00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "id": "job-port-closed",
+      "enabled": false,
+      "comment": "pid 探针在 Windows 走 OpenProcess、在 *nix 走 kill(pid,0)，两边都能用。",
+      "probe": { "type": "pid", "pid": 1234, "state": "exited" },
+      "fire": { "reason": "JOB_EXITED", "kind": "info", "detail": "pid 1234 is gone" }
+    },
+    {
+      "id": "report-written",
+      "enabled": false,
+      "probe": { "type": "file_contains", "path": "/path/to/report.md", "pattern": "^DONE$", "regex": true },
+      "fire": { "reason": "REPORT_READY", "kind": "info", "detail": "{detail}", "context_path": "/path/to/report.md" },
+      "once": true
+    }
+  ]
+}

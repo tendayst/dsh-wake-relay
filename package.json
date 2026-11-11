@@ -1,0 +1,61 @@
+{
+  "name": "dsh-wake-bridge",
+  "version": "0.1.0",
+  "description": "Let any external process wake a DeepSeek Harness session — with synchronous delivery semantics, so the caller can own the retry loop and fire events that happened while the host was down.",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.mjs",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "client.mjs",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "README.en.md",
+    "watcher/*.py",
+    "watcher/rules.json",
+    "watcher/rules.example.json",
+    "docs/*.md"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek",
+    "deepseek-harness",
+    "wake",
+    "webhook",
+    "watcher",
+    "scheduler",
+    "agent",
+    "automation"
+  ],
+  "author": "LittleCodeSauce",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-llm": ">=0.1.0-rc.7"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-llm": {
+      "optional": true
+    }
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "scripts": {
+    "test": "node selftest.mjs",
+    "check": "node --check index.js && node --check client.mjs"
+  }
+}

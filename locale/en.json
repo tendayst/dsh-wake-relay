@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "External wake",
+    "description": "Local HTTP endpoint on 127.0.0.1 that lets any external process wake a Harness session synchronously; nothing is recorded on failure, so the caller owns retries."
+  }
+}

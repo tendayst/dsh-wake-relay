@@ -1,0 +1,21 @@
+# Bundle patch for dsh-wake-bridge.
+#
+# The entry id must not collide with another bundle: profiles persist enable /
+# disable state per entry id, so reusing an id that another install already
+# disabled makes this one silently unavailable.
+#
+# Everything here is optional: with an empty token the plugin generates one on
+# first boot and persists it to $DSH_HOME/wake-bridge-secret.json; with an empty
+# sessionId only requests that carry an explicit `session` are accepted.
+- insert:
+    - id: dsh-wake-bridge
+      name: dsh-wake-bridge
+      config:
+        port: 45871
+        token: ''
+        sessionId: ''
+        cooldownMs: 90000
+        reasonWindowMs: 300000
+        reasonMaxHits: 2
+        globalBurstMs: 3000
+        flushTimeoutMs: 10000
