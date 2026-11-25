@@ -34,6 +34,21 @@ Two processes, two independent restart cycles:
 
 The cost of this split is that you need a resident external process. `watcher/` is one, but any script will do.
 
+## Making it discoverable by an agent
+
+This plugin registers no agent tools — its reader is a script. So by default a
+conversation **does not know it exists** and only learns through a prompt someone
+pasted in.
+
+`examples/skill/SKILL.md` is a ready-made skill: copy it to
+`~/.dsh/skills/wake-relay/SKILL.md` and any session will load it on its own when
+the user says "watch X for me", "wake me when the job finishes", or "don't just
+sit there waiting" — knowing what to call, when **not** to use it (plain time →
+`schedule`, price triggers → exchange conditional orders), and what 200/429/503
+each promise.
+
+Writing the file takes effect immediately; no restart.
+
 ## Compared to in-host probe plugins
 
 | | This | In-host probes (dsh-sentinel et al.) |
