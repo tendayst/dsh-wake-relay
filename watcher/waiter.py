@@ -396,6 +396,12 @@ def load_rules(path: pathlib.Path):
             raise ValueError(f"{rid}: probe.type must be one of {sorted(PROBES)}")
         if not (rule.get("fire") or {}).get("reason"):
             raise ValueError(f"{rid}: fire.reason is required")
+        # Every rule must name its target. Inheriting "latest" silently means
+        # "whichever conversation wrote last", which for an unattended watch is
+        # how a 3am GitHub reply ends up running a turn inside the trading chat.
+        if not (rule.get("session") or defaults.get("session")):
+            raise ValueError(f"{rid}: session is required — write an explicit session id "
+                             f"(or 'latest' if you really mean 'the newest one')")
     return defaults, rules
 
 

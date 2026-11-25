@@ -205,6 +205,10 @@ pythonw watcher/waiter.py --rules my-rules.json                   # 常驻（改
 
 边沿触发（只在假→真那一瞬发一次）、`rearm_s` 防抖、`once` 一次性、持久化重试队列 + `ttl_s`、`session: latest` 自动选磁盘上最新的普通会话。规则表热重载。
 
+> **跨夜/跨周末的等待必须显式写 `ttl_s`。** `defaults.ttl_s` 是 3600（1 小时）。宿主关着时事件只在 pending 队列里等，超时即丢弃——而探针的基线已经走过那条变化，之后不会再触发，等于**永久漏掉**。等一条可能半夜来、可能要几天的回复，写 `"ttl_s": 259200`（72 小时）。
+>
+> **`session` 必须显式写。** 不写会直接 raise（热重载保留旧表）。想投给「最近活跃的会话」就显式写 `"latest"`——那代表你选了它，而不是默认漂移到了某个无关对话里。
+
 状态目录：`$DSH_HOME/wake-bridge-watcher`（`waiter-state.json` / `waiter.log` / `waiter.pid`）。
 
 ---

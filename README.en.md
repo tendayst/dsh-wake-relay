@@ -203,6 +203,10 @@ pythonw watcher/waiter.py --rules my-rules.json                   # resident; ru
 
 Edge-triggered (fires on the false→true transition only), `rearm_s` debounce, `once`, a persisted retry queue with `ttl_s`, and `session: latest` for the newest ordinary session. The rule file reloads without a restart.
 
+> **A wait that can outlast a night needs an explicit `ttl_s`.** `defaults.ttl_s` is 3600 (one hour). While the host is down the event only waits in the pending queue, and past that deadline it is dropped — but the probe's baseline has already advanced past that change, so it will never fire again. That is a **silent permanent miss**. For a reply that may arrive at 3am, or days later, write `"ttl_s": 259200` (72h).
+>
+> **`session` is required.** Leaving it out raises at load time (the previous table is kept). Write `"latest"` if you really mean "whichever conversation is newest" — explicit means you chose it, not that it drifted into an unrelated chat at 3am.
+
 State lives in `$DSH_HOME/wake-bridge-watcher` (`waiter-state.json` / `waiter.log` / `waiter.pid`).
 
 ## Runtime files (`$DSH_HOME`)
